@@ -6,7 +6,7 @@ import math
 #import numpy as np
 
 
-sys.path.append('../lib/python/amd64')
+sys.path.append('../lib/python/arm64')
 
 print(sys.path)
 import robot_interface as sdk
@@ -30,8 +30,21 @@ def jointLinearInterpolation(initPos, targetPos, rate):
     p = initPos*(1-rate) + targetPos*rate
     return p
 
-def is_on_feet(state):
-    pass
+def is_on_feet(state) -> bool:
+    return False
+
+def setup_motor(cmd, num_motor, q, dq, Kp, Kd, tau):
+    cmd.motorCmd[num_motor].q = q
+    cmd.motorCmd[num_motor].dq = dq
+    cmd.motorCmd[num_motor].Kp = Kp
+    cmd.motorCmd[num_motor].Kd = Kd
+    cmd.motorCmd[num_motor].tau = tau
+
+def setup_feet(cmd, lists_motors):
+    assert all(len(lists_motors[0]) == len(l) for l in lists_motors[1:]), "not valid motor data"
+
+    for motor in lists_motors:
+        setup_motor(cmd, motor[0], motor[1], motor[2], motor[3], motor[4], motor[5] )
 
 if __name__ == '__main__':
 
@@ -133,6 +146,9 @@ if __name__ == '__main__':
                 cmd.motorCmd[list(d.values())[i+2]].Kp = Kp[i + 2]
                 cmd.motorCmd[list(d.values())[i+2]].Kd = Kd[i + 2]
                 cmd.motorCmd[list(d.values())[i+2]].tau = 0.0
+
+            # for i in range( 0, 4 ):
+            #     setup_feet(cmd, list(d.values())[i:i+2], [0]*3, Kp[i:i+2], Kd[i:i+2], [-1.6, 0.0, 0.0] )
 
             for num, value in enumerate(d.values()):
                 state[num] = state.motorState[value].q
