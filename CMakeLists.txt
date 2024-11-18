@@ -42,6 +42,6 @@ target_link_libraries(example_velocity_aliengo ${EXTRA_LIBS})
 add_executable(example_torque_aliengo examples/example_torque_aliengo.cpp)
 target_link_libraries(example_torque_aliengo ${EXTRA_LIBS})
 
-add_executable(feet_aliengo aliengo/feet.cpp)
-target_link_libraries(feet_aliengo ${EXTRA_LIBS})
+
+
  
