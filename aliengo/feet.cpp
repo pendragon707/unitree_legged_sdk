@@ -76,33 +76,12 @@ double jointLinearInterpolation(double initPos, double targetPos, double rate)
     return p;
 }
 
-// void setup_leg(String leg)
-// {
-//         cmd.motorCmd[leg].q = qDes[0];
-//         cmd.motorCmd[leg].dq = 0;
-//         cmd.motorCmd[leg].Kp = Kp[0];
-//         cmd.motorCmd[leg].Kd = Kd[0];
-//         cmd.motorCmd[leg].tau = -1.6f;
-
-//         cmd.motorCmd[leg].q = qDes[1];
-//         cmd.motorCmd[leg].dq = 0;
-//         cmd.motorCmd[leg].Kp = Kp[1];
-//         cmd.motorCmd[leg].Kd = Kd[1];
-//         cmd.motorCmd[leg].tau = 0.0f;
-
-//         cmd.motorCmd[leg].q = qDes[2];
-//         cmd.motorCmd[leg].dq = 0;
-//         cmd.motorCmd[leg].Kp = Kp[2];
-//         cmd.motorCmd[leg].Kd = Kd[2];
-//         cmd.motorCmd[leg].tau = 0.0f;
-// }
-
 void Custom::RobotControl()
 {
     motiontime++;
     udp.GetRecv(state);
     // printf("%d  %f\n", motiontime, state.motorState[FR_2].q);
-    printf("%d  %f  %f  %f  %f\n", motiontime, state.motorState[FR_1].q, state.motorState[FR_1].dq, state.motorState[FL_1].q, state.motorState[FL_1].dq);
+    printf("%d  %f  %f  %f  %f\n", motiontime, state.motorState[FR_1].q, state.motorState[FL_1].q, state.motorState[RR_1].q, state.motorState[RL_1].q);
 
     // gravity compensation
     cmd.motorCmd[FR_0].tau = -1.6f;
@@ -330,7 +309,7 @@ int main(void)
 
     while (1)
     {
-        sleep(1000000);
+        sleep(1);
     };
 
     return 0;

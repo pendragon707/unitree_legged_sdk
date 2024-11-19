@@ -5,11 +5,9 @@ import time
 import math
 #import numpy as np
 
-
-sys.path.append('../lib/python/arm64')
-
+sys.path.append('../lib/python/amd64')
 print(sys.path)
-import robot_interface as sdk
+import robot_interface_aliengo as sdk
 
 # low cmd
 TARGET_PORT = 8007
@@ -30,7 +28,13 @@ def jointLinearInterpolation(initPos, targetPos, rate):
     p = initPos*(1-rate) + targetPos*rate
     return p
 
+def compare_states(current_state, target_state, rel_tol = 0.05, abs_tol = 0.0) -> bool:
+    return all([math.isclose(cur, tar, rel_tol = rel_tol, abs_tol = abs_tol) for cur, tar in zip(current_state, target_state)])
+    
+
 def is_on_feet(state) -> bool:
+#    target = [] # to do
+#    return compare_states(state, target)
     return False
 
 def setup_motor(cmd, num_motor, q, dq, Kp, Kd, tau):
@@ -82,10 +86,11 @@ if __name__ == '__main__':
     motiontime = 0
     while True:
 
-        time.sleep(0.002)
+        time.sleep(1)
         motiontime += 1
 
-        # print(motiontime)
+        print(motiontime, state.motorState[d['FR_0']].q, state.motorState[d['FL_0']].q, state.motorState[d['RR_0']].q, state.motorState[d['RL_0']].q )
+        
         # print(state.imu.rpy[0])
         
         udp.Recv()
@@ -150,8 +155,8 @@ if __name__ == '__main__':
             # for i in range( 0, 4 ):
             #     setup_feet(cmd, list(d.values())[i:i+2], [0]*3, Kp[i:i+2], Kd[i:i+2], [-1.6, 0.0, 0.0] )
 
-            for num, value in enumerate(d.values()):
-                state[num] = state.motorState[value].q
+        #    for num, value in enumerate(d.values()):
+        #        state[num] = state.motorState[value].q
 
             if is_on_feet(state):
                 break
