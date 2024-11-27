@@ -6,7 +6,7 @@ import math
 #import numpy as np
 
 sys.path.append('../lib/python/amd64')
-import robot_interface as sdk
+import robot_interface_aliengo as sdk
 
 # low cmd
 TARGET_PORT = 8007
