@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  unitreeleggedsdk:
+    image: unitreeleggedsdk
+    build:
+      context: .
+      dockerfile: ./Dockerfile
