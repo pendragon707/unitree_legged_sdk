@@ -35,19 +35,21 @@ RUN apt-get update &&  apt-get install -y --no-install-recommends \
     # sudo \
     software-properties-common \
     wget \
+    unzip \
+    # python-dev \    
+    python3-dev \
+    python3-setuptools \
     &&  rm -rf /var/lib/apt/lists/*
 
-# Install python dev
-RUN  apt-get install python-dev &&  apt-get install python3-dev
-
 # Install Glib and Cmake
-RUN   apt update &&   apt install \
+RUN  apt update && apt install -y \
     build-essential \
     g++ \
     libglib2.0-dev \
     cmake \
     libboost-all-dev \
-    libmsgpack*
+    libmsgpack* \
+    &&  rm -rf /var/lib/apt/lists/*
 
 # Install lcm >=1.4.0
 RUN wget https://github.com/lcm-proj/lcm/archive/refs/tags/v1.5.0.zip && \
@@ -59,10 +61,11 @@ RUN wget https://github.com/lcm-proj/lcm/archive/refs/tags/v1.5.0.zip && \
     cmake .. && \
     make && \
       make install && \
-    cd lcm-python && \
+    cd ../lcm-python && \
       python3 setup.py install
 
-WORKDIR /
+WORKDIR /home
 COPY . .
 
-CMD ["/build.sh"]
+RUN ["chmod", "+x", "/home/build.sh"]
+CMD ["/home/build.sh"]
