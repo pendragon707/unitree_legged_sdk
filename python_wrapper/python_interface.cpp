@@ -18,6 +18,7 @@ using namespace UNITREE_LEGGED_SDK;
 
 namespace py = pybind11;
 
+// PYBIND11_MODULE(robot_interface, m) {
 PYBIND11_MODULE(robot_interface_aliengo, m) {
   py::enum_<LeggedType>(m, "LeggedType")
       .value("Aliengo", LeggedType::Aliengo)
