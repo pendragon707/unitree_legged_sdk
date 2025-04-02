@@ -23,7 +23,7 @@ def main():
                    6:'RR_0', 7:'RR_1', 8:'RR_2', 
                    9:'RL_0', 10:'RL_1', 11:'RL_2' }
         
-    udp = sdk.UDP(**ALIENGO_LOW_WIRED_DEFAULTS)
+    udp = sdk.UDP(*ALIENGO_LOW_WIRED_DEFAULTS)    
 
     cmd = sdk.LowCmd()
     udp.InitCmdData(cmd)
@@ -40,10 +40,13 @@ def main():
         udp.GetRecv(state)
 
         if motiontime % 100 == 0:
-            for num, name in motor_names.items():
+            for num, name in motor_names.items():                
                 print( name, " q ", state.motorState[ num ].q )
                 print( name, " tau ", state.motorState[ num ].tauEst )
                 print()
+
+        udp.SetSend(cmd)
+        udp.Send()
 
 
 
