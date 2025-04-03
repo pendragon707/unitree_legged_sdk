@@ -38,7 +38,7 @@ def main():
     Kp = [90] * 12
     Kd = [1] * 12
 
-    qInit = [0] * 12    
+    init_q = [0] * 12    
         
     udp = sdk.UDP(*ALIENGO_LOW_WIRED_DEFAULTS)    
 
@@ -49,10 +49,7 @@ def main():
     state = sdk.LowState()
 
     motiontime = 0
-    count1 = 0
-    count2 = 0
-    count3 = 0
-    count4 = 0
+    count = 0
     while True:
         time.sleep(0.002)
         motiontime += 1
@@ -60,31 +57,28 @@ def main():
         udp.Recv()
         udp.GetRecv(state)
 
-        # if motiontime % 100 == 0:
-        #     for num, name in motor_names.items():                
-        #         print( name, " q ", state.motorState[ num ].q )
-        #         print( name, " tau ", state.motorState[ num ].tauEst )
-        #         print()
-
         if( motiontime >= 0 and motiontime < 10):
 
             for num, value in enumerate(motor_names.items()):
-                qInit[num] = state.motorState[num].q
+                init_q[num] = state.motorState[num].q
 
         if( motiontime >= 10 and motiontime < 20):
-            rate = min(count1 /  20, 1)
+            rate = min(count /  20, 1)
 
             for num, value in enumerate(motor_names.items()):
-                cmd.motorCmd[num].q = jointLinearInterpolation(qInit[num], start_q[num], rate)
+                cmd.motorCmd[num].q = jointLinearInterpolation(init_q[num], start_q[num], rate)
                 cmd.motorCmd[num].dq = 0
                 cmd.motorCmd[num].Kp = Kp[num]
                 cmd.motorCmd[num].Kd = Kd[num]
                 cmd.motorCmd[num].tau = 0.0
 
-            count1 += 1
+            count += 1
 
         if( motiontime >= 20 and motiontime < 400):
-            rate = min(count2 /  380, 1)
+            if motiontime == 20:                
+                count = 0
+        
+            rate = min(count /  380, 1)
 
             for num, value in enumerate(motor_names.items()):
                 cmd.motorCmd[num].q = jointLinearInterpolation(start_q[num], mid_q[num], rate)
@@ -93,10 +87,13 @@ def main():
                 cmd.motorCmd[num].Kd = Kd[num]
                 cmd.motorCmd[num].tau = 0.0
 
-            count2 += 1
+            count += 1
 
         if( motiontime >= 400): 
-            alpha = min(count3 /  1000, 1)
+            if motiontime == 400:                
+                count = 0
+
+            alpha = min(count /  1000, 1)
 
             for num, name in motor_names.items(): 
                 cmd.motorCmd[num].q = jointLinearInterpolation(mid_q[num], end_q[num], alpha)
@@ -105,10 +102,13 @@ def main():
                 cmd.motorCmd[num].Kd = Kd[num]
                 cmd.motorCmd[num].tau = 0.0
 
-            count3 += 1
+            count += 1
 
         if( motiontime >= 1400): 
-            alpha = min(count4 /  1000, 1)
+            if motiontime == 1400:                
+                count = 0
+        
+            alpha = min(count /  1000, 1)
 
             for num, name in motor_names.items(): 
                 cmd.motorCmd[num].q = jointLinearInterpolation(end_q[num], start_q[num], alpha)
@@ -117,7 +117,7 @@ def main():
                 cmd.motorCmd[num].Kd = Kd[num]
                 cmd.motorCmd[num].tau = 0.0
 
-            count4 += 1
+            count += 1
 
         if(motiontime > 10):
             safe.PowerProtect(cmd, state, 1)
