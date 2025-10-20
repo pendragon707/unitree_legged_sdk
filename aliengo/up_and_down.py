@@ -48,7 +48,7 @@ if __name__ == '__main__':
     LOWLEVEL  = 0xff
     start_q = [-0.15, 1.18, -2.8] * 4
     end_q = [0.0, 0.3, -1, 0.0, 1, -1]
-    dt = 0.002
+    
     qInit = [0] * 12
     qDes = [0] * 12
     sin_count = 0
@@ -67,7 +67,6 @@ if __name__ == '__main__':
 
     count = 0
     count2 = 0
-    Tpi = 0
     motiontime = 0
     while True:
         time.sleep(0.002)
