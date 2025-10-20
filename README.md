@@ -89,7 +89,7 @@ sudo ldconfig -v
 
 1. Заходите в папку python_wrapper
 ```
-cd Aliengo/python_wrapper
+cd python_wrapper
 ```
 2. Создаете папку build и cкомпилируете robot_interface_aliengo (если есть желание изменить название этого файла перейди в файл python_wrapper/python_interface.cpp строка 21: PYBIND11_MODULE(robot_interface_aliengo, m))
 ```
