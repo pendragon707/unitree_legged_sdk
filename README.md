@@ -7,7 +7,7 @@ support robot: Aliengo
 
 not support robot: Laikago, Aliengo, A1. (Check release [v3.3.1](https://github.com/unitreerobotics/unitree_legged_sdk/releases/tag/v3.3.1) for support)
 
-## Как настроить коннект между роботом и компьютером + првоерка этого соединения:
+## Как настроить коннект между роботом и компьютером + проверка этого соединения:
 
 1.Установим библиотеки :
  
@@ -89,7 +89,7 @@ sudo ldconfig -v
 
 1. Заходите в папку python_wrapper
 ```
-cd python_wrapper
+cd unitree_legged_sdk/python_wrapper
 ```
 2. Создаете папку build и cкомпилируете robot_interface_aliengo (если есть желание изменить название этого файла перейди в файл python_wrapper/python_interface.cpp строка 21: PYBIND11_MODULE(robot_interface_aliengo, m))
 ```
